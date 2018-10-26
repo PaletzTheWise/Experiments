@@ -31,10 +31,13 @@
     <ClInclude Include="..\source\Destroyable.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\OutPointer.h">
+    <ClInclude Include="..\source\SmartPointerAdapter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\SmartPointerAdapter.h">
+    <ClInclude Include="..\source\Trace.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\OutputPointer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

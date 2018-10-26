@@ -1,0 +1,217 @@
+
+Argument Glue
+
++legacy
+  +createDestroyableLegacy
+    +Destroyable::Destroyable    01549ED0
+    -Destroyable::Destroyable    01549ED0
+    +Destroyable::init    01549ED0
+    -Destroyable::init    01549ED0
+  -createDestroyableLegacy
+  +OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+  -OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+  +createDestroyableBetter
+    +Destroyable::Destroyable    01544A10
+    -Destroyable::Destroyable    01544A10
+    +OutputPointer<class Destroyable,class DestroyDeleter>::operator =
+      +OutputPointer<class Destroyable,class DestroyDeleter>::reset
+        propagating 01544A10
+        +DestroyDeleter::operator ()
+          +Destroyable::destroy    01549ED0
+            +Destroyable::~Destroyable    01549ED0
+            -Destroyable::~Destroyable    01549ED0
+          -Destroyable::destroy    01549ED0
+        -DestroyDeleter::operator ()
+      -OutputPointer<class Destroyable,class DestroyDeleter>::reset
+    -OutputPointer<class Destroyable,class DestroyDeleter>::operator =
+    +OutputPointer<class Destroyable,class DestroyDeleter>::operator !=
+      +OutputPointer<class Destroyable,class DestroyDeleter>::get
+      -OutputPointer<class Destroyable,class DestroyDeleter>::get
+    -OutputPointer<class Destroyable,class DestroyDeleter>::operator !=
+    +OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+      +OutputPointer<class Destroyable,class DestroyDeleter>::get
+        +OutputPointer<class Destroyable,class DestroyDeleter>::get
+        -OutputPointer<class Destroyable,class DestroyDeleter>::get
+      -OutputPointer<class Destroyable,class DestroyDeleter>::get
+    -OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+    +Destroyable::init    01544A10
+    -Destroyable::init    01544A10
+  -createDestroyableBetter
+  +Destroyable::doStuff    01544A10
+  -Destroyable::doStuff    01544A10
+  +Destroyable::destroy    01544A10
+    +Destroyable::~Destroyable    01544A10
+    -Destroyable::~Destroyable    01544A10
+  -Destroyable::destroy    01544A10
+-legacy
++better
+  +OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+  -OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+  +createDestroyableBetter
+    +Destroyable::Destroyable    01549ED0
+    -Destroyable::Destroyable    01549ED0
+    +OutputPointer<class Destroyable,class DestroyDeleter>::operator =
+      +OutputPointer<class Destroyable,class DestroyDeleter>::reset
+        propagating 01549ED0
+      -OutputPointer<class Destroyable,class DestroyDeleter>::reset
+    -OutputPointer<class Destroyable,class DestroyDeleter>::operator =
+    +OutputPointer<class Destroyable,class DestroyDeleter>::operator !=
+      +OutputPointer<class Destroyable,class DestroyDeleter>::get
+      -OutputPointer<class Destroyable,class DestroyDeleter>::get
+    -OutputPointer<class Destroyable,class DestroyDeleter>::operator !=
+    +OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+      +OutputPointer<class Destroyable,class DestroyDeleter>::get
+        +OutputPointer<class Destroyable,class DestroyDeleter>::get
+        -OutputPointer<class Destroyable,class DestroyDeleter>::get
+      -OutputPointer<class Destroyable,class DestroyDeleter>::get
+    -OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+    +Destroyable::init    01549ED0
+    -Destroyable::init    01549ED0
+  -createDestroyableBetter
+  +Destroyable::doStuff    01549ED0
+  -Destroyable::doStuff    01549ED0
+  +DestroyDeleter::operator ()
+    +Destroyable::destroy    01549ED0
+      +Destroyable::~Destroyable    01549ED0
+      -Destroyable::~Destroyable    01549ED0
+    -Destroyable::destroy    01549ED0
+  -DestroyDeleter::operator ()
+-better
+
+Call Site Glue
+
++legacy
+  +createDestroyable_cannotBeChanged
+    +Destroyable::Destroyable    01544A20
+    -Destroyable::Destroyable    01544A20
+    +Destroyable::init    01544A20
+    -Destroyable::init    01544A20
+  -createDestroyable_cannotBeChanged
+  +Destroyable::doStuff    01544A20
+  -Destroyable::doStuff    01544A20
+  +DestroyDeleter::operator ()
+    +Destroyable::destroy    01544A20
+      +Destroyable::~Destroyable    01544A20
+      -Destroyable::~Destroyable    01544A20
+    -Destroyable::destroy    01544A20
+  -DestroyDeleter::operator ()
+-legacy
++better
+  +makeSmartPointerAdapter
+    +SmartPointerAdapter<class std::unique_ptr<class Destroyable,class DestroyDeleter>,class Destroyable>::SmartPointerAdapter
+      acquired 00000000
+    -SmartPointerAdapter<class std::unique_ptr<class Destroyable,class DestroyDeleter>,class Destroyable>::SmartPointerAdapter
+  -makeSmartPointerAdapter
+  +SmartPointerAdapter<class std::unique_ptr<class Destroyable,class DestroyDeleter>,class Destroyable>::get
+  -SmartPointerAdapter<class std::unique_ptr<class Destroyable,class DestroyDeleter>,class Destroyable>::get
+  +createDestroyable_cannotBeChanged
+    +Destroyable::Destroyable    01549ED0
+    -Destroyable::Destroyable    01549ED0
+    +Destroyable::init    01549ED0
+    -Destroyable::init    01549ED0
+  -createDestroyable_cannotBeChanged
+  +SmartPointerAdapter<class std::unique_ptr<class Destroyable,class DestroyDeleter>,class Destroyable>::~SmartPointerAdapter
+    propagating 01549ED0
+    +SmartPointerAdapterOperations::get
+    -SmartPointerAdapterOperations::get
+    +SmartPointerAdapterOperations::reset
+    -SmartPointerAdapterOperations::reset
+  -SmartPointerAdapter<class std::unique_ptr<class Destroyable,class DestroyDeleter>,class Destroyable>::~SmartPointerAdapter
+  +Destroyable::doStuff    01549ED0
+  -Destroyable::doStuff    01549ED0
+  +DestroyDeleter::operator ()
+    +Destroyable::destroy    01549ED0
+      +Destroyable::~Destroyable    01549ED0
+      -Destroyable::~Destroyable    01549ED0
+    -Destroyable::destroy    01549ED0
+  -DestroyDeleter::operator ()
+-better
+
+Super Glue
+
++legacy
+  +initMoreDestroyableLegacy
+    +initDestroyableLegacy
+      +createDestroyableThirdParty
+        +Destroyable::Destroyable    01549ED0
+        -Destroyable::Destroyable    01549ED0
+      -createDestroyableThirdParty
+      +Destroyable::init    01549ED0
+      -Destroyable::init    01549ED0
+    -initDestroyableLegacy
+    +Destroyable::init    01549ED0
+    -Destroyable::init    01549ED0
+  -initMoreDestroyableLegacy
+  +Destroyable::doStuff    01549ED0
+  -Destroyable::doStuff    01549ED0
+  +Destroyable::destroy    01549ED0
+    +Destroyable::~Destroyable    01549ED0
+    -Destroyable::~Destroyable    01549ED0
+  -Destroyable::destroy    01549ED0
+-legacy
++better
+  +OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+  -OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+  +initMoreDestroyableBetter
+    +OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+    -OutputPointer<class Destroyable,class DestroyDeleter>::OutputPointer
+    +initDestroyableBetter
+      +makeSmartPointerAdapter
+        +SmartPointerAdapter<class OutputPointer<class Destroyable,class DestroyDeleter>,class Destroyable>::SmartPointerAdapter
+          +OutputPointer<class Destroyable,class DestroyDeleter>::get
+            +OutputPointer<class Destroyable,class DestroyDeleter>::get
+            -OutputPointer<class Destroyable,class DestroyDeleter>::get
+          -OutputPointer<class Destroyable,class DestroyDeleter>::get
+          acquired 00000000
+        -SmartPointerAdapter<class OutputPointer<class Destroyable,class DestroyDeleter>,class Destroyable>::SmartPointerAdapter
+      -makeSmartPointerAdapter
+      +SmartPointerAdapter<class OutputPointer<class Destroyable,class DestroyDeleter>,class Destroyable>::get
+      -SmartPointerAdapter<class OutputPointer<class Destroyable,class DestroyDeleter>,class Destroyable>::get
+      +createDestroyableThirdParty
+        +Destroyable::Destroyable    01549ED0
+        -Destroyable::Destroyable    01549ED0
+      -createDestroyableThirdParty
+      +SmartPointerAdapter<class OutputPointer<class Destroyable,class DestroyDeleter>,class Destroyable>::~SmartPointerAdapter
+        propagating 01549ED0
+        +SmartPointerAdapterOperations::get
+          +OutputPointer<class Destroyable,class DestroyDeleter>::get
+            +OutputPointer<class Destroyable,class DestroyDeleter>::get
+            -OutputPointer<class Destroyable,class DestroyDeleter>::get
+          -OutputPointer<class Destroyable,class DestroyDeleter>::get
+        -SmartPointerAdapterOperations::get
+        +SmartPointerAdapterOperations::reset
+          +OutputPointer<class Destroyable,class DestroyDeleter>::reset
+            propagating 01549ED0
+          -OutputPointer<class Destroyable,class DestroyDeleter>::reset
+        -SmartPointerAdapterOperations::reset
+      -SmartPointerAdapter<class OutputPointer<class Destroyable,class DestroyDeleter>,class Destroyable>::~SmartPointerAdapter
+      +OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+        +OutputPointer<class Destroyable,class DestroyDeleter>::get
+          +OutputPointer<class Destroyable,class DestroyDeleter>::get
+          -OutputPointer<class Destroyable,class DestroyDeleter>::get
+        -OutputPointer<class Destroyable,class DestroyDeleter>::get
+      -OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+      +Destroyable::init    01549ED0
+      -Destroyable::init    01549ED0
+    -initDestroyableBetter
+    +OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+      +OutputPointer<class Destroyable,class DestroyDeleter>::get
+        +OutputPointer<class Destroyable,class DestroyDeleter>::get
+        -OutputPointer<class Destroyable,class DestroyDeleter>::get
+      -OutputPointer<class Destroyable,class DestroyDeleter>::get
+    -OutputPointer<class Destroyable,class DestroyDeleter>::operator ->
+    +Destroyable::init    01549ED0
+    -Destroyable::init    01549ED0
+  -initMoreDestroyableBetter
+  +Destroyable::doStuff    01549ED0
+  -Destroyable::doStuff    01549ED0
+  +DestroyDeleter::operator ()
+    +Destroyable::destroy    01549ED0
+      +Destroyable::~Destroyable    01549ED0
+      -Destroyable::~Destroyable    01549ED0
+    -Destroyable::destroy    01549ED0
+  -DestroyDeleter::operator ()
+-better
+
+There should be zero Destroyable instances left: 0
+

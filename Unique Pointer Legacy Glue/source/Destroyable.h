@@ -1,25 +1,41 @@
 
 #pragma once
+#include "Trace.h"
 
 class Destroyable
 {
 public:
-	bool init(bool shouldSucceed) 
+	static size_t aliveInstanceCount;
+
+	Destroyable()
 	{
-		return shouldSucceed;
+		++aliveInstanceCount;
+		TRACEOBJ;
+	}
+
+	bool init() 
+	{
+		TRACEOBJ;
+		return true;
 	}
 
 	void destroy() 
 	{
+		TRACEOBJ;
 		delete this; 
 	}
 
-	bool doStuff(bool shouldSucceed)
+	bool doStuff()
 	{
-		return shouldSucceed;
+		TRACEOBJ;
+		return true;
 	}
 private:
-	~Destroyable() {}
+	~Destroyable() 
+	{
+		--aliveInstanceCount;
+		TRACEOBJ;
+	}
 };
 
 class DestroyDeleter
@@ -28,6 +44,7 @@ public:
 	template<class T>
 	void operator()(T * ptr)
 	{
+		TRACE;
 		if (ptr != nullptr)
 		{
 			ptr->destroy();

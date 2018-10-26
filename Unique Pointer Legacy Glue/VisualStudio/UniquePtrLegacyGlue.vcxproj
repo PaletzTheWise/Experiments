@@ -155,8 +155,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Destroyable.h" />
-    <ClInclude Include="..\source\OutPointer.h" />
+    <ClInclude Include="..\source\OutputPointer.h" />
     <ClInclude Include="..\source\SmartPointerAdapter.h" />
+    <ClInclude Include="..\source\Trace.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
