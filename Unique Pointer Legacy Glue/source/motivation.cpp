@@ -9,11 +9,9 @@ using namespace std;
 
 static bool legacy1()
 {
-	Destroyable * ptr = NULL; // define all variables at the top for more legacy feel :)
-	bool rc = true; // chain through RC for single return at the bottom glory
+	Destroyable * ptr = new Destroyable;
 
-	rc = rc && ((ptr = new Destroyable) != NULL); // On a normal compiler new can't return null, but let's suppose the line looks like this for whatever reason.
-	rc = rc && ptr->init();
+	bool rc = ptr->init();
 	rc = rc && ptr->doStuff();
 
 	if (ptr != NULL)
@@ -28,11 +26,9 @@ static bool legacy1()
 
 static bool legacy1Upgraded()
 {
-	bool rc = true; // chain through RC for single return at the bottom glory
-
 	unique_ptr<Destroyable,DestroyDeleter> ptr(new Destroyable);
-	rc = rc && (ptr.get() != NULL); // On a normal compiler new can't return null, but let's suppose the line looks like this for whatever reason.
-	rc = rc && ptr->init();
+
+	bool rc = ptr->init();
 	rc = rc && ptr->doStuff();
 
 	// no need to destroy manually, win!
@@ -40,24 +36,27 @@ static bool legacy1Upgraded()
 	return rc;
 }
 
-// The problem is new and delete/destroy is often not happening in the same method
+// The problem is new and delete/destroy is often not happening in the same method and the pointer is ofter assigned to pointer reference
 
 static bool createDestroyable(Destroyable *& destroyableOut)
 {
-	bool rc = true; // chain through RC for single return at the bottom glory
+	destroyableOut = new Destroyable;
 
-	rc = rc && ((destroyableOut = new Destroyable) != NULL); // On a normal compiler new can't return null, but let's suppose the line looks like this for whatever reason.
-	rc = rc && destroyableOut->init();
+	if ( destroyableOut->init() )
+	{
+		destroyableOut->destroy();
+		destroyableOut = NULL;
+		return false;
+	}
 
-	return rc;
+	return true;
 }
 
 static bool legacy2()
 {
-	Destroyable * ptr = NULL; // define all variables at the top for more legacy feel :)
-	bool rc = true; // chain through RC for single return at the bottom glory
+	Destroyable * ptr = NULL;
 
-	rc = rc && createDestroyable( ptr);
+	bool rc = createDestroyable( ptr );
 	rc = rc && ptr->doStuff();
 
 	if (ptr != NULL)
@@ -73,14 +72,15 @@ static bool legacy2()
 
 static bool legacy2Upgraded()
 {
-	unique_ptr<Destroyable, DestroyDeleter> ptr; // define all variables at the top for more legacy feel :)
-	bool rc = true; // chain through RC for single return at the bottom glory
+	unique_ptr<Destroyable, DestroyDeleter> ptr;
+	bool rc = true;
 
 	{ 
 		Destroyable * temp = NULL;
 		rc = rc && createDestroyable(temp);
 		ptr.reset(temp);
 	}
+
 	rc = rc && ptr->doStuff();
 
 	return rc;
@@ -100,13 +100,9 @@ static bool createDestroyableUpgraded(unique_ptr<Destroyable, DestroyDeleter> & 
 
 static bool legacy2MoreUpgraded()
 {
-	unique_ptr<Destroyable, DestroyDeleter> ptr; // define all variables at the top for more legacy feel :)
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && createDestroyableUpgraded(ptr);
-	rc = rc && ptr->doStuff();
-
-	return rc;
+	unique_ptr<Destroyable, DestroyDeleter> ptr;
+	
+	return createDestroyableUpgraded(ptr) && ptr->doStuff();
 }
 
 

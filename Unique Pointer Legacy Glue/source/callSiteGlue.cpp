@@ -7,12 +7,8 @@
 static bool createDestroyable_cannotBeChanged(Destroyable *& destroyableOut)
 {
 	TRACE;
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && ((destroyableOut = new Destroyable) != NULL); // On a normal compiler new can't return null, but let's suppose the line looks like this for whatever reason.
-	rc = rc && destroyableOut->init();
-
-	return rc;
+	destroyableOut = new Destroyable;
+	return destroyableOut->init();
 }
 
 // The question is how can you write modern code using such an API?
@@ -27,11 +23,7 @@ static bool legacy()
 	bool rc = createDestroyable_cannotBeChanged(temp);
 	ptr.reset(temp);
 
-	return (
-		rc
-		&&
-		ptr->doStuff()
-	);
+	return rc && ptr->doStuff();
 }
 
 // The unique pointer adapter will do the trick.

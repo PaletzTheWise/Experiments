@@ -6,23 +6,15 @@
 static bool createDestroyableLegacy(Destroyable *& destroyableOut)
 {
 	TRACE;
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && ((destroyableOut = new Destroyable) != NULL); // On a normal compiler new can't return null, but let's suppose the line looks like this for whatever reason.
-	rc = rc && destroyableOut->init();
-
-	return rc;
+	destroyableOut = new Destroyable;
+	return destroyableOut->init();
 }
 
 static bool createDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter> destroyableOut)
 {
 	TRACE;
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && ((destroyableOut = new Destroyable) != NULL); // On a normal compiler new can't return null, but let's suppose the line looks like this for whatever reason.
-	rc = rc && destroyableOut->init();
-
-	return rc;
+	destroyableOut = new Destroyable;
+	return destroyableOut->init();
 }
 
 // Ok, did we just change the argument type? Indeed. No actual changes were needed in the body itself!
@@ -35,10 +27,9 @@ static bool createDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter> d
 static bool legacy()
 {
 	TRACE;
-	Destroyable * ptr = NULL; // define all variables at the top for more legacy feel :)
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && createDestroyableLegacy(ptr);
+	Destroyable * ptr = NULL;
+	
+	bool rc = createDestroyableLegacy(ptr);
 	rc = rc && createDestroyableBetter(ptr); // destroys object created by createDestroyableLegacy(), createDestroyableLegacy() wouldn't do that unless explicitly coded to do so.
 	rc = rc && ptr->doStuff();
 

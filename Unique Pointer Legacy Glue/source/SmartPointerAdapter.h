@@ -43,7 +43,9 @@ public:
 		TRACE;
 		smartPointer = other.smartPointer;
 		plainPointer = other.plainPointer;
-		other.smartPointer = NULL; // due to the destructor mechanism there can be only one
+
+		// due to the destructor mechanism there can be only one
+		other.smartPointer = NULL; 
 		other.plainPointer = NULL;
 	}
 

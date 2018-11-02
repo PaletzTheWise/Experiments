@@ -5,10 +5,10 @@
 // Final scenario where both glues are combined.
 // Assuming there is a third party function to create an object that we cannot upgrade to unique pointer.
 
-static bool createDestroyableThirdParty(Destroyable *& destroyableOut)
+static void createDestroyableThirdParty(Destroyable *& destroyableOut)
 {
 	TRACE;
-	return (destroyableOut = new Destroyable) != NULL; // On a normal compiler new can't return null, but let's suppose the line looks like this for whatever reason.
+	destroyableOut = new Destroyable;
 }
 
 // Then a legacy function initializes the created object
@@ -16,12 +16,8 @@ static bool createDestroyableThirdParty(Destroyable *& destroyableOut)
 static bool initDestroyableLegacy(Destroyable *& destroyableOut)
 {
 	TRACE;
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && createDestroyableThirdParty( destroyableOut );
-	rc = rc && destroyableOut->init();
-
-	return rc;
+	createDestroyableThirdParty( destroyableOut );
+	return destroyableOut->init();
 }
 
 // And another legacy function initializes it a bit more
@@ -29,12 +25,8 @@ static bool initDestroyableLegacy(Destroyable *& destroyableOut)
 static bool initMoreDestroyableLegacy(Destroyable *& destroyableOut)
 {
 	TRACE;
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && initDestroyableLegacy(destroyableOut);
-	rc = rc && destroyableOut->init(); // more init()
-
-	return rc;
+	bool rc =  initDestroyableLegacy(destroyableOut);
+	return rc && destroyableOut->init(); // more init()
 }
 
 // And finally yet another legacy function uses the init more function.
@@ -43,9 +35,8 @@ static bool legacy()
 {
 	TRACE;
 	Destroyable * ptr = NULL; // define all variables at the top for more legacy feel :)
-	bool rc = true; // chain through RC for single return at the bottom glory
-
-	rc = rc && initMoreDestroyableLegacy(ptr);
+	
+	bool rc = initMoreDestroyableLegacy(ptr);
 	rc = rc && ptr->doStuff();
 
 	if (ptr != NULL)
@@ -64,11 +55,7 @@ static bool legacy()
 static bool initDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter> destroyableOut)
 {
 	TRACE;
-	if (!createDestroyableThirdParty(adaptSmartPointer(destroyableOut)))
-	{
-		return false;
-	}
-
+	createDestroyableThirdParty(adaptSmartPointer(destroyableOut));
 	return destroyableOut->init();
 }
 

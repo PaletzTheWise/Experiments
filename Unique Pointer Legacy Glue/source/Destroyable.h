@@ -19,7 +19,7 @@ public:
 		return true;
 	}
 
-	void destroy() 
+	virtual void destroy() 
 	{
 		TRACEOBJ;
 		delete this; 
@@ -31,7 +31,7 @@ public:
 		return true;
 	}
 private:
-	~Destroyable() 
+	virtual ~Destroyable() 
 	{
 		--aliveInstanceCount;
 		TRACEOBJ;
