@@ -49,7 +49,7 @@ static bool legacy()
 
 // We can improve init function using the OutputPointer to keep it compatible with all call sites.
 // However, the third party create function won't e compatible with OutputPointer, so we have to use adaptSmartPointer().
-// Fortunately, even though OutputPointer is not a smart pointer in the strictest sense, it still does fullfil the requirements of
+// Fortunately, even though OutputPointer is not a smart pointer in the strictest sense, it still does fulfill the requirements of
 // SmartPointerAdapter.
 
 static bool initDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter> destroyableOut)

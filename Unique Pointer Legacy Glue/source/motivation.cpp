@@ -36,7 +36,7 @@ static bool legacy1Upgraded()
 	return rc;
 }
 
-// The problem is new and delete/destroy is often not happening in the same method and the pointer is ofter assigned to pointer reference
+// The problem is new and delete/destroy is often not happening in the same method and the pointer is often assigned to pointer reference
 
 static bool createDestroyable(Destroyable *& destroyableOut)
 {
@@ -68,7 +68,7 @@ static bool legacy2()
 }
 
 // Applying unique_ptr to legacy2() results in code that doesn't look great becasue there has to be
-// a temporary pointer and aditional call to reset unique_ptr. 
+// a temporary pointer and additional call to reset unique_ptr. 
 
 static bool legacy2Upgraded()
 {
@@ -87,7 +87,7 @@ static bool legacy2Upgraded()
 }
 
 // The root of the problem is createDestroyable() itself and that can be addressed.
-// As simple wrapper function can fix the problem, either as an overload or a distinctly named variation.
+// A simple wrapper function can fix the problem, either as an overload or a distinctly named variation.
 // Either way the code is backward-compatible with legacy call sites.
 
 static bool createDestroyableUpgraded(unique_ptr<Destroyable, DestroyDeleter> & destroyableOut)

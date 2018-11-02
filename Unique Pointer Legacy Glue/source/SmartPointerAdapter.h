@@ -71,7 +71,7 @@ public:
 
 namespace SmartPointerAdapterOperations
 {
-	// A set of fucntions for unique_ptr
+	// A set of functions for unique_ptr
 
 	template<typename T, typename TDeleter>
 	T * get(unique_ptr<T, TDeleter> & uniquePointer)
@@ -104,7 +104,8 @@ namespace SmartPointerAdapterOperations
 	}
 }
 
-// Function allows us to infer template parameters
+// These functions allow us to infer template parameters
+
 template<typename T, typename TDeleter>
 SmartPointerAdapter<unique_ptr<T, TDeleter>, T> makeSmartPointerAdapter(unique_ptr<T, TDeleter> & uniquePointer)
 {
@@ -112,7 +113,6 @@ SmartPointerAdapter<unique_ptr<T, TDeleter>, T> makeSmartPointerAdapter(unique_p
 	return SmartPointerAdapter<unique_ptr<T, TDeleter>, T>(&uniquePointer);
 }
 
-// Function allows us to infer template parameters
 template<typename T, typename TDeleter>
 SmartPointerAdapter<OutputPointer<T, TDeleter>, T> makeSmartPointerAdapter(OutputPointer<T, TDeleter> & uniquePointer)
 {
@@ -124,8 +124,8 @@ SmartPointerAdapter<OutputPointer<T, TDeleter>, T> makeSmartPointerAdapter(Outpu
 // WARNING:
 //  * Caller using the smart pointer in the same statement where adaptSmartPointer() is used will
 //    result in undefined behavior. For example the following would fail:
-//      create( adaptSmartPtr(smartPtr) ) && smartPtr->DoStuff();
-//    The above can be corrected by adding ';' between adaptSmartPtr(smartPtr) and smartPtr->DoStuff():
+//      create( adaptSmartPtr(smartPtr) ) && smartPtr->doStuff();
+//    The above can be corrected by adding ';' between adaptSmartPtr(smartPtr) and smartPtr->doStuff():
 //      bool rc = create( adaptSmartPtr(smartPtr) );
 //      rc && smartPtr->DoStuff()
 //    works fine.

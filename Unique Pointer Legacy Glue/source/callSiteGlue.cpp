@@ -50,11 +50,11 @@ static bool better()
 
 
 // The mechanism of SmartPointerAdapter can backfire
-// when one inadvertedly tries to use the smart pointer
+// when one inadvertently tries to use the smart pointer
 // before SmartPointerAdapter leaves scope.
 // adaptSmartPointer creates a temporary variable that is within
 // scope for the whole statement. In theory temporary variable scope can
-// even be extended by making a referenc to it, but the macro should prevent
+// even be extended by making a reference to it, but the macro should prevent
 // that. But there are still ways to execute multiple functions within one statement
 // such as the below.
 

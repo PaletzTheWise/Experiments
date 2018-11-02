@@ -1,7 +1,7 @@
 #include "OutputPointer.h"
 #include "Destroyable.h"
 
-// Now I will outline how a legacy method can be upgraded in a bacwkard compatible fashion with little effort
+// Now I will outline how a legacy method can be upgraded in a backward compatible fashion with little effort
 
 static bool createDestroyableLegacy(Destroyable *& destroyableOut)
 {
@@ -17,7 +17,7 @@ static bool createDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter> d
 	return destroyableOut->init();
 }
 
-// Ok, did we just change the argument type? Indeed. No actual changes were needed in the body itself!
+// OK, did we just change the argument type? Indeed. No actual changes were needed in the body itself!
 // There are functionality changes though. Now we can pass unique_ptr references as the first argument.
 // WARNING! Non-null plain pointer held by destroyableOut will now be deleted before overwritten, 
 // doesn't matter if it originates from outside or inside.

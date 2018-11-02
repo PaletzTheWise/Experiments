@@ -7,13 +7,13 @@ using namespace std;
 #include "Trace.h"
 
 // Output pointer allows methods to accept both plain pointer and unique pointer references
-// for the purpuse of returning a newly allocated.
+// for the purpose of returning a newly allocated.
 //
 // This is useful only if legacy code already calls the method with plain pointer reference.
 // New code should use unique pointers exclusively.
 // 
 // For example 
-// bool legacy( int * intOut )
+// bool legacy( int *& intOut )
 // can be rewritten as 
 // bool legacy( OutputPointer<int> intOut )
 //
@@ -104,7 +104,7 @@ public:
 		return const_cast<T *>( std::as_const(*this).get() );
 	}
 
-	// The following methods are mostly usefull for
+	// The following methods are mostly useful for
 	// backward-compatibility of old method code.
 	
 	OutputPointer & operator=(T * value)
