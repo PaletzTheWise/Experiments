@@ -24,84 +24,84 @@ using namespace std;
 template<typename TSmartPointer, typename T>
 class SmartPointerAdapter
 {
-	TSmartPointer * smartPointer;
-	T * plainPointer;
+    TSmartPointer * smartPointer;
+    T * plainPointer;
 
 public:
-	
-	SmartPointerAdapter(TSmartPointer * uniquePointer)
-		: smartPointer(uniquePointer)
-	{
-		TRACE;
-		plainPointer = uniquePointer->get();
-		Trace::indent();
-		cout << "acquired " << plainPointer << endl;
-	}
+    
+    SmartPointerAdapter(TSmartPointer * uniquePointer)
+        : smartPointer(uniquePointer)
+    {
+        TRACE;
+        plainPointer = uniquePointer->get();
+        Trace::indent();
+        cout << "acquired " << plainPointer << endl;
+    }
 
-	SmartPointerAdapter(SmartPointerAdapter && other)
-	{
-		TRACE;
-		smartPointer = other.smartPointer;
-		plainPointer = other.plainPointer;
+    SmartPointerAdapter(SmartPointerAdapter && other)
+    {
+        TRACE;
+        smartPointer = other.smartPointer;
+        plainPointer = other.plainPointer;
 
-		// due to the destructor mechanism there can be only one
-		other.smartPointer = NULL; 
-		other.plainPointer = NULL;
-	}
+        // due to the destructor mechanism, there can be only one
+        other.smartPointer = NULL; 
+        other.plainPointer = NULL;
+    }
 
-	~SmartPointerAdapter()
-	{
-		TRACE;
-		Trace::indent();
-		cout << "propagating " << plainPointer << endl;
-		if (smartPointer && SmartPointerAdapterOperations::get( *smartPointer ) != plainPointer)
-		{
-			SmartPointerAdapterOperations::reset(*smartPointer, plainPointer);
-		}
-	}
+    ~SmartPointerAdapter()
+    {
+        TRACE;
+        Trace::indent();
+        cout << "propagating " << plainPointer << endl;
+        if (smartPointer && SmartPointerAdapterOperations::get( *smartPointer ) != plainPointer)
+        {
+            SmartPointerAdapterOperations::reset(*smartPointer, plainPointer);
+        }
+    }
 
-	T *& get()
-	{
-		TRACE;
-		return plainPointer;
-	}
+    T *& get()
+    {
+        TRACE;
+        return plainPointer;
+    }
 
-	void operator=(SmartPointerAdapter &) = delete;
+    void operator=(SmartPointerAdapter &) = delete;
 };
 
 namespace SmartPointerAdapterOperations
 {
-	// A set of functions for unique_ptr
+    // A set of functions for unique_ptr
 
-	template<typename T, typename TDeleter>
-	T * get(unique_ptr<T, TDeleter> & uniquePointer)
-	{
-		TRACE;
-		return uniquePointer.get();
-	}
+    template<typename T, typename TDeleter>
+    T * get(unique_ptr<T, TDeleter> & uniquePointer)
+    {
+        TRACE;
+        return uniquePointer.get();
+    }
 
-	template<typename T, typename TDeleter>
-	void reset(unique_ptr<T, TDeleter> & uniquePointer, T * value)
-	{
-		TRACE;
-		uniquePointer.reset(value);
-	}
+    template<typename T, typename TDeleter>
+    void reset(unique_ptr<T, TDeleter> & uniquePointer, T * value)
+    {
+        TRACE;
+        uniquePointer.reset(value);
+    }
 
-	// A set of functions for OutputPointer
+    // A set of functions for OutputPointer
 
-	template<typename T, typename TDeleter>
-	T * get(OutputPointer<T, TDeleter> & outPointer)
-	{
-		TRACE;
-		return outPointer.get();
-	}
+    template<typename T, typename TDeleter>
+    T * get(OutputPointer<T, TDeleter> & outPointer)
+    {
+        TRACE;
+        return outPointer.get();
+    }
 
-	template<typename T, typename TDeleter>
-	void reset(OutputPointer<T, TDeleter> & outPointer, T * value)
-	{
-		TRACE;
-		outPointer.reset(value);
-	}
+    template<typename T, typename TDeleter>
+    void reset(OutputPointer<T, TDeleter> & outPointer, T * value)
+    {
+        TRACE;
+        outPointer.reset(value);
+    }
 }
 
 // These functions allow us to infer template parameters
@@ -109,20 +109,20 @@ namespace SmartPointerAdapterOperations
 template<typename T, typename TDeleter>
 SmartPointerAdapter<unique_ptr<T, TDeleter>, T> makeSmartPointerAdapter(unique_ptr<T, TDeleter> & uniquePointer)
 {
-	TRACE;
-	return SmartPointerAdapter<unique_ptr<T, TDeleter>, T>(&uniquePointer);
+    TRACE;
+    return SmartPointerAdapter<unique_ptr<T, TDeleter>, T>(&uniquePointer);
 }
 
 template<typename T, typename TDeleter>
 SmartPointerAdapter<OutputPointer<T, TDeleter>, T> makeSmartPointerAdapter(OutputPointer<T, TDeleter> & uniquePointer)
 {
-	TRACE;
-	return SmartPointerAdapter<OutputPointer<T, TDeleter>, T>(&uniquePointer);
+    TRACE;
+    return SmartPointerAdapter<OutputPointer<T, TDeleter>, T>(&uniquePointer);
 }
 
 // Macro allows to automatically use the pointer ref returned by get() while the adapter remains in scope
 // WARNING:
-//  * Caller using the smart pointer in the same statement where adaptSmartPointer() is used will
+//  * Caller using the smart pointer in the same full expression where adaptSmartPointer() is used will
 //    result in undefined behavior. For example the following would fail:
 //      create( adaptSmartPtr(smartPtr) ) && smartPtr->doStuff();
 //    The above can be corrected by adding ';' between adaptSmartPtr(smartPtr) and smartPtr->doStuff():

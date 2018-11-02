@@ -93,7 +93,18 @@ static bool legacy2Upgraded()
 static bool createDestroyableUpgraded(unique_ptr<Destroyable, DestroyDeleter> & destroyableOut)
 {
 	Destroyable *ptr = nullptr;
-	bool rc = createDestroyable(ptr);
+	bool rc = false;
+	try
+	{
+		rc = createDestroyable(ptr);
+	}
+	catch (...)
+	{
+		// required for exception safety, in case createDestroyable() throws after assigning object address to ptr
+		destroyableOut.reset(ptr);
+		throw;
+	}
+
 	destroyableOut.reset(ptr);
 	return rc;
 }
@@ -104,7 +115,6 @@ static bool legacy2MoreUpgraded()
 	
 	return createDestroyableUpgraded(ptr) && ptr->doStuff();
 }
-
 
 // But if there are many functions like that, it requires a lot of arguably ugly glue code.
 // On the other hand if there are few call sites and functions, it is probably easier just to change createDestroyable() and
