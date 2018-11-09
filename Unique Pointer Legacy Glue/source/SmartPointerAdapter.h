@@ -114,10 +114,10 @@ SmartPointerAdapter<unique_ptr<T, TDeleter>, T> makeSmartPointerAdapter(unique_p
 }
 
 template<typename T, typename TDeleter>
-SmartPointerAdapter<OutputPointer<T, TDeleter>, T> makeSmartPointerAdapter(OutputPointer<T, TDeleter> & uniquePointer)
+SmartPointerAdapter<OutputPointer<T, TDeleter>, T> makeSmartPointerAdapter(OutputPointer<T, TDeleter> & outputPointer)
 {
     TRACE;
-    return SmartPointerAdapter<OutputPointer<T, TDeleter>, T>(&uniquePointer);
+    return SmartPointerAdapter<OutputPointer<T, TDeleter>, T>(&outputPointer);
 }
 
 // Macro allows to automatically use the pointer ref returned by get() while the adapter remains in scope

@@ -42,7 +42,7 @@ static bool createDestroyable(Destroyable *& destroyableOut)
 {
 	destroyableOut = new Destroyable;
 
-	if ( destroyableOut->init() )
+	if ( !destroyableOut->init() )
 	{
 		destroyableOut->destroy();
 		destroyableOut = NULL;
