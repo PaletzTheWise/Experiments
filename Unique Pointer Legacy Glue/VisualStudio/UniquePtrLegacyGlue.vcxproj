@@ -151,6 +151,7 @@
     <ClCompile Include="..\source\callSiteGlue.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\motivation.cpp" />
+    <ClCompile Include="..\source\smart.cpp" />
     <ClCompile Include="..\source\superGlue.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,9 @@
     <ClInclude Include="..\source\OutputPointer.h" />
     <ClInclude Include="..\source\SmartPointerAdapter.h" />
     <ClInclude Include="..\source\Trace.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\dllBoundary.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

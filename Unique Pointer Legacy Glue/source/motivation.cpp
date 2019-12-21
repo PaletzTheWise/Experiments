@@ -67,7 +67,7 @@ static bool legacy2()
 	return rc;
 }
 
-// Applying unique_ptr to legacy2() results in code that doesn't look great becasue there has to be
+// Applying unique_ptr to legacy2() results in code that doesn't look great because there has to be
 // a temporary pointer and additional call to reset unique_ptr. 
 
 static bool legacy2Upgraded()

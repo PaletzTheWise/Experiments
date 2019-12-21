@@ -17,7 +17,13 @@ static bool initDestroyableLegacy(Destroyable *& destroyableOut)
 {
 	TRACE;
 	createDestroyableThirdParty( destroyableOut );
-	return destroyableOut->init();
+	if (!destroyableOut->init())
+	{
+		destroyableOut = nullptr;
+		return false;
+	}
+
+	return true;
 }
 
 // And another legacy function initializes it a bit more
@@ -26,7 +32,14 @@ static bool initMoreDestroyableLegacy(Destroyable *& destroyableOut)
 {
 	TRACE;
 	bool rc =  initDestroyableLegacy(destroyableOut);
-	return rc && destroyableOut->init(); // more init()
+
+	if (!destroyableOut->init())
+	{
+		destroyableOut = nullptr;
+		return false;
+	}
+
+	return true;
 }
 
 // And finally yet another legacy function uses the init more function.
@@ -56,7 +69,13 @@ static bool initDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter> des
 {
 	TRACE;
 	createDestroyableThirdParty(adaptSmartPointer(destroyableOut));
-	return destroyableOut->init();
+	if (!destroyableOut->init())
+	{
+		destroyableOut = nullptr;
+		return false;
+	}
+
+	return true;
 }
 
 static bool initMoreDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter> destroyableOut)
@@ -67,7 +86,13 @@ static bool initMoreDestroyableBetter(OutputPointer<Destroyable, DestroyDeleter>
 		return false;
 	}
 
-	return destroyableOut->init();
+	if (!destroyableOut->init())
+	{
+		destroyableOut = nullptr;
+		return false;
+	}
+
+	return true;
 }
 
 // Now we can improve the legacy method to use unique_ptr.
@@ -84,8 +109,29 @@ static bool better()
 	);
 }
 
+Destroyable * createDestroyableNewLike()
+{
+	return new Destroyable();
+}
+
+unique_ptr<Destroyable, DestroyDeleter> createDestroyableUniqueLike()
+{
+	return unique_ptr<Destroyable, DestroyDeleter>(new Destroyable);
+}
+
+
 void superGlue()
 {
 	legacy();
 	better();
+
+	unique_ptr<Destroyable, DestroyDeleter> b( createDestroyableNewLike() );
+	b = unique_ptr<Destroyable, DestroyDeleter>( createDestroyableNewLike() );
+	Destroyable * c = createDestroyableNewLike();
+
+	unique_ptr<Destroyable, DestroyDeleter> a(createDestroyableUniqueLike());
+	b = unique_ptr<Destroyable, DestroyDeleter>(createDestroyableUniqueLike());
+
+	unique_ptr<Destroyable, DestroyDeleter> a(createDestroyableUniqueLike());
+	b = createDestroyableUniqueLike();
 }

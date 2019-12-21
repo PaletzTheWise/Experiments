@@ -26,6 +26,9 @@
     <ClCompile Include="..\source\superGlue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\smart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Destroyable.h">
@@ -40,5 +43,8 @@
     <ClInclude Include="..\source\OutputPointer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\dllBoundary.txt" />
   </ItemGroup>
 </Project>

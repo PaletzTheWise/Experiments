@@ -8,7 +8,13 @@ static bool createDestroyable_cannotBeChanged(Destroyable *& destroyableOut)
 {
     TRACE;
     destroyableOut = new Destroyable;
-    return destroyableOut->init();
+	if (!destroyableOut->init())
+	{
+		destroyableOut->destroy();
+		return false;
+	}
+
+	return true;
 }
 
 // The question is how can you write modern code using such an API?
@@ -62,8 +68,8 @@ static bool pitfall()
 {
     unique_ptr<Destroyable, DestroyDeleter> ptr;
 
-    return (
-        createDestroyable_cannotBeChanged(adaptSmartPointer(ptr))
+	return (
+		createDestroyable_cannotBeChanged(adaptSmartPointer(ptr))
         &&
         ptr->doStuff() // error - still the same full expression, ptr is not updated yet
     );

@@ -1,0 +1,11 @@
+
+
+
+program.exe      |      library.dll                       ________    ___________________
+                 |      Object * ptr = new Object();     | Object |  | Object VT         |
+            <<< ptr <<<                                  | vt *   |  | void (*destroy)() |
+ptr->doStuff()   |                                       | ...    |  | ...               |
+//delete ptr;    |                                       |________|  |___________________|
+ptr->destroy();  |
+
+
